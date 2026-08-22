@@ -1,0 +1,42 @@
+name: openGym
+version: "1.2.7"
+slug: opengym
+description: Self-hosted gym and body-weight tracker.
+url: "https://github.com/arvids-unavailable/openGym"
+
+startup: application
+boot: auto
+
+# Home Assistant sidebar / Ingress
+ingress: true
+ingress_port: 3000
+ingress_stream: true
+panel_icon: mdi:dumbbell
+panel_title: openGym
+
+# Direct access outside Home Assistant.
+# Host port can be changed in the App configuration.
+ports:
+  3000/tcp: 3000
+
+ports_description:
+  3000/tcp: openGym Web Interface
+
+# Persistent storage
+map:
+  - addon_config:rw
+
+# Supported architectures
+arch:
+  - amd64
+  - aarch64
+  - armv7
+
+# App configuration shown in Home Assistant
+options:
+  port: 3000
+  log_level: info
+
+schema:
+  port: port
+  log_level: list(trace|debug|info|warning|error)
