@@ -1,0 +1,48 @@
+server {
+    listen ${WEB_PORT};
+    server_name _;
+
+    root /opengym/web;
+    index index.html;
+
+    client_max_body_size 32m;
+
+    # Same-origin proxy to the Node API (required for WebAuthn/passkeys)
+    location /api/ {
+        proxy_pass http://127.0.0.1:${API_PORT};
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Exercise media, downloaded into persistent storage on first run
+    location /img/ {
+        alias /data/media/img/;
+        access_log off;
+        expires 30d;
+        add_header Cache-Control "public, max-age=2592000, immutable";
+    }
+
+    location /gif/ {
+        alias /data/media/gif/;
+        access_log off;
+        expires 30d;
+        add_header Cache-Control "public, max-age=2592000, immutable";
+    }
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # App shell: always revalidate so updates show up immediately
+    location ~* \.(js|css|json|html)$ {
+        add_header Cache-Control "no-cache, must-revalidate";
+    }
+
+    gzip on;
+    gzip_types text/plain text/css application/json application/javascript image/svg+xml;
+    gzip_vary on;
+    gzip_min_length 1024;
+}

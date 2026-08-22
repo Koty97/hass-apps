@@ -1,37 +1,40 @@
 name: openGym
 version: "1.2.7"
 slug: opengym
-description: Self-hosted gym and body-weight tracker.
-url: "https://github.com/arvids-unavailable/openGym"
-
-startup: application
-boot: auto
-
-# Home Assistant sidebar / Ingress
-ingress: true
-ingress_port: 3000
-ingress_stream: true
-panel_icon: mdi:dumbbell
-panel_title: openGym
-
-# Direct access outside Home Assistant.
-ports:
-  3000/tcp: 3000
-
-ports_description:
-  3000/tcp: openGym Web Interface
-
-# Supported architectures
+description: >-
+  Self-hosted gym & body-weight tracker: weekly plans, guided workouts,
+  progression tracking, estimated 1RM and passkey login. Built from source
+  from DuarteSantos/openGym (AGPL-3.0), since upstream only publishes
+  separate web/api images for docker-compose rather than a single add-on
+  image.
+url: "https://gitea.com/DuarteSantos/openGym"
 arch:
   - amd64
   - aarch64
-  - armv7
-
-# App configuration shown in Home Assistant
+startup: application
+boot: auto
+webui: "http://[HOST]:[PORT:8099]/"
+ports:
+  8099/tcp: 8099
+ports_description:
+  8099/tcp: "openGym web UI"
 options:
-  port: 3000
-  log_level: info
-
+  rp_id: localhost
+  origin: "http://localhost:8099"
+  rp_name: openGym
+  session_days: 90
+  admin_uids: ""
+  invite_only: false
+  allow_guest: true
+  vapid_subject: ""
+  download_media: true
 schema:
-  port: port
-  log_level: list(trace|debug|info|warning|error)
+  rp_id: str
+  origin: url
+  rp_name: str
+  session_days: int(1,3650)
+  admin_uids: str
+  invite_only: bool
+  allow_guest: bool
+  vapid_subject: str?
+  download_media: bool
