@@ -15,16 +15,11 @@ panel_icon: mdi:dumbbell
 panel_title: openGym
 
 # Direct access outside Home Assistant.
-# Host port can be changed in the App configuration.
 ports:
   3000/tcp: 3000
 
 ports_description:
   3000/tcp: openGym Web Interface
-
-# Persistent storage
-map:
-  - addon_config:rw
 
 # Supported architectures
 arch:
